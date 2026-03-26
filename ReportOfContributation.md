@@ -116,7 +116,7 @@ All figures saved to `figures/` at dpi=300:
 
 | Branch | Purpose |
 |--------|---------|
-| `dhruv-analysis\analysis.ipynb` | Main analysis work (Sections 1, 2, 3) |
+| `main\analysis.ipynb` | Main analysis work (Sections 1, 2, 3) |
 | `dhruv-analysis\question.ipynb` | Extra Q&A analysis (Questions 1 and 2) |
 
 ---
