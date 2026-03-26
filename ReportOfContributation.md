@@ -116,11 +116,8 @@ All figures saved to `figures/` at dpi=300:
 
 | Branch | Purpose |
 |--------|---------|
-| `dhruv-analysis` | Main analysis work (Sections 1, 2, 3) |
-| `Question` | Bonus Q&A analysis (Questions 1 and 2) |
-
-Branches were merged using pull requests following proper
-git workflow as required by the rubric.
+| `dhruv-analysis\analysis.ipynb` | Main analysis work (Sections 1, 2, 3) |
+| `dhruv-analysis\question.ipynb` | Extra Q&A analysis (Questions 1 and 2) |
 
 ---
 
