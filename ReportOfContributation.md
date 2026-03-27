@@ -70,7 +70,7 @@ in the GitHub repository under the `dhruv-analysis` and
 
 ---
 
-## Extra Analysis — `notebooks/dhruv-analysis.ipynb`
+## Extra Analysis — `notebooks/questions.ipynb`
 
 ### Question 1 — What Do the Top 10% Most Popular Songs Have in Common?
 - Defined top 10% threshold using `.quantile(0.90)`
@@ -95,6 +95,20 @@ in the GitHub repository under the `dhruv-analysis` and
 - Created scatter plot of valence vs popularity (exported to figures/)
 - Wrote full markdown findings and conclusion
 
+### Question 4 — Do Shorter Songs Get More Popular Than Longer Ones on Spotify?
+- Removed 271 outlier songs over 10 minutes before analysis
+- Categorized songs into 4 length buckets using `.apply()`:
+  Short (< 2.5 min), Medium (2.5-4 min),
+  Long (4-6 min), Very Long (> 6 min)
+- Computed average popularity by length category
+- Computed correlation between duration and popularity (+0.0114)
+- Identified shortest genres: grindcore (127s), children (139s), study (141s)
+- Identified longest genres: minimal-techno (361s),
+  detroit-techno (349s), chicago-house (349s)
+- Created bar chart of popularity by song length (exported to figures/)
+- Created scatter plot of duration vs popularity (exported to figures/)
+- Wrote full markdown findings and conclusion
+
 ---
 
 ## Figures Exported
@@ -109,6 +123,8 @@ All figures saved to `figures/` at dpi=300:
 | top10_popularity_danceability.png | Question 1 |
 | popularity_by_mood.png | Question 2 |
 | valence_vs_popularity.png | Question 2 |
+| popularity_by_length.png | Question 4 |
+| duration_vs_popularity.png | Question 4 |
 
 ---
 
@@ -116,8 +132,11 @@ All figures saved to `figures/` at dpi=300:
 
 | Branch | Purpose |
 |--------|---------|
-| `main\analysis.ipynb` | Main analysis work (Sections 1, 2, 3) |
-| `dhruv-analysis\question.ipynb` | Extra Q&A analysis (Questions 1 and 2) |
+| `dhruv-analysis` | Main analysis work (Sections 1, 2, 3) + Questions |
+| `Question` | Bonus Q&A analysis (Questions 1, 2, and 4) |
+
+Branches were merged using pull requests following proper
+git workflow as required by the rubric.
 
 ---
 
@@ -138,6 +157,10 @@ All figures saved to `figures/` at dpi=300:
   either happy or sad songs
 - Valence has a slight **negative correlation** (-0.0385) with
   popularity — people slightly prefer sadder songs on Spotify
+- The **sweet spot for song length is 4-6 minutes** — scoring
+  34.39 average popularity vs 30.53 for short songs
+- Duration has almost no real impact on popularity
+  (correlation = +0.0114)
 
 ---
 
