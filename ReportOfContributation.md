@@ -174,9 +174,6 @@ git workflow as required by the rubric.
 
 - Python 3, pandas, NumPy, matplotlib, seaborn, Jupyter Lab, Git / GitHub
 
----
----
-
 # Contribution Report — Rafik Taleb
 ## FSU ID: rt24e
 
@@ -342,3 +339,48 @@ git workflow as required by the rubric.
 ## Tools Used
 
 - Python 3, pandas, NumPy, matplotlib, seaborn, Jupyter Lab, Git / GitHub
+
+
+---
+---
+
+# Contribution Report — Imran
+## FSU ID: IA24C
+
+---
+
+## Overview
+
+I contributed to the project by improving the interpretation and write-up quality of the analysis notebook, with a focus on clearer conclusions and stronger evidence-based explanations.
+
+---
+
+## Notebook Contributions `notebooks/analysis.ipynb`
+
+### Section 4 — Research Q4 and Q5 Write-Up Improvements
+- Expanded the Key Findings for **Research Q4 (Song Length Sweet Spot)**
+  with clearer interpretation of quantile-level popularity patterns
+- Added concrete numeric comparisons for each duration quantile
+  to support conclusions
+- Expanded the Key Findings for **Research Q5 (Collaboration Effect)**
+  with clearer solo vs collaboration comparisons
+- Added artist-count trend interpretation (1–6 artists) and caveats
+  about lower sample sizes in high artist-count groups
+- Improved readability and narrative clarity for final report use
+
+---
+
+## Key Findings From My Contributions
+
+- Mid-length songs (Q3–Q4) show higher average popularity than very short and very long tracks
+- Collaboration has a modest positive effect on popularity overall, with small-to-moderate collaborations performing best
+- Adding explicit numeric evidence and caveats made the conclusions more defensible and easier to communicate
+
+---
+
+## Tools Used
+
+- Python 3, pandas, NumPy, matplotlib, seaborn, Jupyter Lab, Git / GitHub
+
+---
+---
