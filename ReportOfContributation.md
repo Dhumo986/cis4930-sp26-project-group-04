@@ -266,3 +266,79 @@ All figures saved to `figures/` at dpi=300:
 ## Tools Used
 
 - Python 3, pandas, NumPy, matplotlib, seaborn, Jupyter Lab, Git / GitHub
+
+# Contribution Report — Thomas Schmidt
+## FSU ID: tns23
+
+---
+
+## Overview
+
+I contributed to the project by implementing Section 4 —
+Visualizations and Feature Exploration in the main analysis
+notebook. This included creating all four required plot types,
+exporting figures, and writing plain-English findings. All work
+was completed on the `viz` branch and merged into main.
+
+---
+
+## Notebook Contributions — `notebooks/analysis.ipynb`
+
+### Section 4 — Visualizations and Feature Exploration
+- Reloaded cleaned dataset to ensure Section 4 runs independently
+- Created a line plot of average popularity by genre (top 20, sorted)
+  - No release year column exists in the dataset, so genre was
+    used as the ordered x-axis
+- Created a bar plot of average energy by genre (top 15)
+  using seaborn viridis color palette
+- Created a histogram of danceability distribution with
+  mean and median reference lines
+- Created a scatter plot of energy vs loudness showing the
+  strong positive correlation (r ≈ 0.76)
+- Exported all 4 figures to `figures/` at dpi=300
+- Wrote markdown key findings for each visualization
+
+---
+
+## Figures Exported
+
+All figures saved to `figures/` at dpi=300:
+
+| Figure | Section |
+|--------|---------|
+| popularity_by_genre.png | Section 4 |
+| energy_by_genre.png | Section 4 |
+| danceability_distribution.png | Section 4 |
+| energy_vs_loudness.png | Section 4 |
+
+---
+
+## Git Contributions
+
+| Branch | Purpose |
+|--------|---------|
+| `viz` | Section 4 — Visualizations and Feature Exploration |
+
+Branch was merged using a pull request following proper
+git workflow as required by the rubric.
+
+---
+
+## Key Findings From My Analysis
+
+- Pop-film and k-pop lead average popularity across all genres,
+  with a steep drop-off after the top 5
+- Death-metal, grindcore, and metalcore are the most energetic
+  genres (energy > 0.9)
+- Danceability is roughly normally distributed, centered around
+  0.55–0.60 with a slight left skew
+- Energy and loudness have a strong positive correlation (r ≈ 0.76),
+  the strongest relationship among all audio features
+- High-popularity tracks appear across all energy/loudness levels,
+  confirming these features alone do not determine popularity
+
+---
+
+## Tools Used
+
+- Python 3, pandas, NumPy, matplotlib, seaborn, Jupyter Lab, Git / GitHub
