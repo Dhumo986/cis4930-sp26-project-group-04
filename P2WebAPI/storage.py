@@ -1,62 +1,63 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "734f324b-10ac-435b-be5d-511af16d20bf",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "\"\"\"\n",
-    "storage.py - Handles saving weather records to CSV and SQLite.\n",
-    "TODO: Implemented by Teammate 3.\n",
-    "\"\"\"\n",
-    "\n",
-    "\n",
-    "def save_to_csv(records: list, filepath: str):\n",
-    "    \"\"\"\n",
-    "    Save records to a CSV file, appending if it already exists.\n",
-    "\n",
-    "    Args:\n",
-    "        records:  list of dicts with weather data\n",
-    "        filepath: path to the CSV file\n",
-    "    \"\"\"\n",
-    "    # TODO: Teammate 3 implements this\n",
-    "    raise NotImplementedError(\"storage.py not yet implemented by teammate.\")\n",
-    "\n",
-    "\n",
-    "def save_to_sqlite(records: list, filepath: str):\n",
-    "    \"\"\"\n",
-    "    Save records to a SQLite database, appending new rows each run.\n",
-    "\n",
-    "    Args:\n",
-    "        records:  list of dicts with weather data\n",
-    "        filepath: path to the SQLite .db file\n",
-    "    \"\"\"\n",
-    "    # TODO: Teammate 3 implements this\n",
-    "    raise NotImplementedError(\"storage.py not yet implemented by teammate.\")"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.13.3"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+"""Storage helpers for appending weather records to CSV and SQLite."""
+
+from __future__ import annotations
+
+import logging
+import sqlite3
+from pathlib import Path
+from typing import Mapping, Sequence
+
+import pandas as pd
+
+logger = logging.getLogger(__name__)
+
+
+def _to_dataframe(records: Sequence[Mapping] | pd.DataFrame) -> pd.DataFrame:
+    """Convert API records to a DataFrame with stable column order."""
+    if isinstance(records, pd.DataFrame):
+        df = records.copy()
+    else:
+        df = pd.DataFrame.from_records(records)
+
+    if df.empty:
+        return df
+
+    # Keep columns stable for repeatable CSV/SQLite outputs.
+    return df.reindex(sorted(df.columns), axis=1)
+
+
+def save_to_csv(records: Sequence[Mapping] | pd.DataFrame, filepath: str) -> int:
+    """Append records to CSV and return number of rows written."""
+    df = _to_dataframe(records)
+    if df.empty:
+        logger.info("No records to write to CSV.")
+        return 0
+
+    target = Path(filepath)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = target.exists()
+
+    df.to_csv(target, mode="a", index=False, header=not file_exists)
+    logger.info("Appended %s rows to CSV: %s", len(df), target)
+    return int(len(df))
+
+
+def save_to_sqlite(
+    records: Sequence[Mapping] | pd.DataFrame,
+    filepath: str,
+    table_name: str = "weather_records",
+) -> int:
+    """Append records to SQLite table and return number of rows written."""
+    df = _to_dataframe(records)
+    if df.empty:
+        logger.info("No records to write to SQLite.")
+        return 0
+
+    target = Path(filepath)
+    target.parent.mkdir(parents=True, exist_ok=True)
+
+    with sqlite3.connect(target) as conn:
+        df.to_sql(table_name, conn, if_exists="append", index=False)
+
+    logger.info("Appended %s rows to SQLite table '%s': %s", len(df), table_name, target)
+    return int(len(df))
