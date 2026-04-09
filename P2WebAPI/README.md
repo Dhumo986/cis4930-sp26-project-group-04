@@ -1,7 +1,7 @@
 # Automated Data Pipeline from Web APIs
 
-Course: CIS 4930 (Spring 2026)  
-Group: 04
+**Course:** CIS 4930 — Introduction to Python (Spring 2026)  
+**Group:** 04
 
 ## Group Members
 
@@ -11,146 +11,172 @@ Group: 04
 | Imran Ahmed | ia24c@fsu.edu |
 | Dhruv Upadhyay | dtu24@fsu.edu |
 
+---
+
 ## Project Title
 
-Florida City Weather Snapshot Pipeline (Open-Meteo)
+**GitHub Repository Activity Tracker**
 
 ## Project Description
 
-This project automates weather data collection for multiple Florida cities using the Open-Meteo public API. Each run fetches current weather snapshots, handles HTTP failures gracefully, and appends records to local CSV and SQLite outputs so the dataset grows over time for analysis and reporting.
+This project builds an automated Python data pipeline that collects repository metadata from the GitHub REST API for education-related Python projects. On each run, the pipeline fetches multiple pages of results, handles request errors safely, and appends structured records to a local CSV (and optionally SQLite) data store for longitudinal analysis.
+
+Real-world context: this can be used to monitor trends in open-source learning resources, repository popularity, and language usage over time.
+
+---
 
 ## API Documentation
 
-- Open-Meteo API docs: https://open-meteo.com/en/docs
-- Forecast endpoint used: https://api.open-meteo.com/v1/forecast
+- GitHub REST API docs: https://docs.github.com/en/rest
+- Search repositories endpoint: https://docs.github.com/en/rest/search/search#search-repositories
 
-## API Justification
+---
 
-Open-Meteo is a strong fit for this project because it is free, public, and returns clean JSON without requiring authentication. It supports query-parameter based requests (`latitude`, `longitude`, and selected weather fields), making it ideal for demonstrating robust HTTP usage and repeated calls across multiple locations.
+## Why This API
+
+The GitHub API is relevant because it provides real, high-volume public data that changes over time. It supports meaningful pagination and query parameters, making it ideal for demonstrating robust HTTP requests, JSON parsing, and incremental data collection.
 
 ### API Constraints
 
-- No API key required (easy classroom setup).
-- Data is request-driven per location, so repeated calls are needed for each city.
-- Must validate response content because some fields can be missing depending on requested variables.
+- **Rate limits:** unauthenticated requests are limited (GitHub rate limiting applies).
+- **Pagination:** page-based (`page`, `per_page`) with finite result windows.
+- **Auth:** optional token can increase limits; this project works without auth for classroom-scale runs.
+
+---
 
 ## Data Pipeline Goals
 
-1. Fetch weather snapshots for at least 3 cities per run.
-2. Parse JSON safely and extract at least 5 meaningful fields.
-3. Convert records into a `pandas.DataFrame` with clear column names.
-4. Append results to a persistent CSV and SQLite table (no silent overwrite).
-5. Log run status and errors to both terminal output and a file in `logs/`.
+1. Fetch repository data for a configurable query (default: `python education`).
+2. Collect multiple pages per run (e.g., 3–5 pages, `per_page=30`).
+3. Extract and store at least 5 meaningful fields per repository.
+4. Handle failures (timeouts/request errors) without crashing silently.
+5. Append new rows to a persistent dataset on repeated runs.
 
-## Code Structure
+---
 
-Current implementation under [P2WebAPI](P2WebAPI):
+## Planned Repository Structure
 
 ```text
 P2WebAPI/
 ├── README.md
-├── api_client.py         # API calls + repeated city loop + request handling
-├── pipeline.py           # Orchestrates fetch -> storage -> logging
-├── storage.py            # DataFrame conversion + CSV/SQLite append logic
+├── src/
+│   ├── pipeline.py          # Main orchestration script
+│   ├── api_client.py        # HTTP requests + pagination
+│   └── storage.py           # CSV/SQLite write helpers
+├── data/
+│   └── processed/
+│       └── github_repos.csv
 └── logs/
-		└── .gitkeep          # keeps logs directory tracked in git
+	└── pipeline.log
 ```
 
-Output files are written to the project data folder:
+---
 
-- CSV: `data/processed/weather_data.csv`
-- SQLite DB: `data/processed/weather_data.db`
-- Log file: `logs/pipeline.log` (created at runtime)
+## Minimum Technical Features
 
-## Storage Details
+The implementation demonstrates:
 
-### CSV Output
+- `requests.get(..., params=..., timeout=...)`
+- JSON parsing via `response.json()`
+- Safe field access with `.get()` defaults
+- Pagination loop over multiple pages
+- `try/except` with `raise_for_status()` and `RequestException`
+- Conversion to `pandas.DataFrame`
+- Persistent local storage with CSV and SQLite append
 
-The pipeline appends rows to `data/processed/weather_data.csv` each run.
+### Example Fields Collected
 
-- If file does not exist: writes header + rows.
-- If file exists: appends only new rows (header omitted).
+- `run_timestamp`
+- `repo_id`
+- `full_name`
+- `html_url`
+- `description`
+- `stargazers_count`
+- `forks_count`
+- `open_issues_count`
+- `language`
+- `created_at`
+- `updated_at`
 
-### SQLite Output
+---
 
-The pipeline appends rows to table `weather_records` in `data/processed/weather_data.db`.
+## Data Output
 
-- Uses `DataFrame.to_sql(..., if_exists="append")`.
-- Table is auto-created on first run.
+Primary output:
 
-### SQLite Schema (logical)
+- `data/processed/github_repos.csv` (appended across runs)
+- SQLite database `data/processed/github_repos.db`
+- Table name: `repo_snapshots`
+- Key columns: `run_timestamp`, `repo_id`, `full_name`, `stargazers_count`
 
-SQLite columns are derived from DataFrame columns in each record. Typical schema fields include:
+---
 
-- `run_timestamp` (TEXT)
-- `city` (TEXT)
-- `latitude` (REAL)
-- `longitude` (REAL)
-- `temperature_2m` (REAL)
-- `relative_humidity_2m` (REAL)
-- `wind_speed_10m` (REAL)
-- `weather_code` (INTEGER)
-- `observation_time` (TEXT)
+## How to Run
 
-Example table creation shape:
-
-```sql
-CREATE TABLE weather_records (
-	run_timestamp TEXT,
-	city TEXT,
-	latitude REAL,
-	longitude REAL,
-	temperature_2m REAL,
-	relative_humidity_2m REAL,
-	wind_speed_10m REAL,
-	weather_code INTEGER,
-	observation_time TEXT
-);
-```
-
-## Running the Pipeline
-
-From the repository root:
+From the `P2WebAPI` directory:
 
 ```bash
-python P2WebAPI/pipeline.py
+python -m src.pipeline
 ```
 
-or from [P2WebAPI](P2WebAPI):
+Alternative:
 
 ```bash
-python pipeline.py
+python src/pipeline.py
 ```
 
-## Logging Setup
-
-`pipeline.py` configures logging to:
-
-- console (`StreamHandler`) for live feedback
-- file (`FileHandler`) at `logs/pipeline.log`
-
-The directory is created automatically with:
-
-- `os.makedirs("logs", exist_ok=True)`
-
-Repository tracking for `logs/` is enabled by committing `logs/.gitkeep`.
-
-## Example Cron Schedule
-
-Run every day at 8:00 AM:
-
-```cron
-0 8 * * * /usr/bin/python3 /home/imran/Repositories/cis4930-sp26-project-group-04/P2WebAPI/pipeline.py >> /home/imran/Repositories/cis4930-sp26-project-group-04/P2WebAPI/logs/cron.log 2>&1
-```
-
-## Example Run Notes
+### Example Console Output
 
 ```text
-[INFO] Pipeline run started
-[INFO] Fetching weather data for 4 cities...
-[INFO] Successfully fetched N records.
-[INFO] Appended N rows to CSV.
-[INFO] Appended N rows to SQLite table weather_records.
-[INFO] Pipeline run completed successfully.
+[INFO] Starting pipeline run...
+[INFO] Query: python education
+[INFO] Fetching page 1...
+[INFO] Fetching page 2...
+[INFO] Fetching page 3...
+[INFO] Collected 90 repositories.
+[INFO] Appended 90 rows to data/processed/github_repos.csv
+[INFO] Pipeline completed successfully.
 ```
 
+---
+
+## Error Handling Strategy
+
+- Timeout handling with clear fallback message
+- Request-level exception handling (`requests.exceptions.RequestException`)
+- Status validation with `response.raise_for_status()`
+- Graceful skip/continue behavior instead of silent failure
+- Optional log persistence to `logs/pipeline.log`
+
+---
+
+## Automation Hook (Optional)
+
+Example cron schedule (every day at 8:00 AM):
+
+```cron
+0 8 * * * /usr/bin/python3 /path/to/P2WebAPI/src/pipeline.py
+```
+
+---
+
+## Team Workflow
+
+- Feature branches (`api-client`, `storage`, `error-handling`, `docs`)
+- PR-based merges into main
+- Commit history reflects contributions from all members
+
+Role split (rotating):
+
+- API client lead: HTTP + pagination
+- Data/storage lead: DataFrame + CSV/SQLite
+- Robustness lead: logging + retries + exceptions
+- Documentation lead: README + run notes
+
+---
+
+## Stretch Goals (Bonus)
+
+- Add CLI arguments (`--query`, `--max-pages`, `--per-page`)
+- Add retry/backoff for temporary API failures
+- Add a mini EDA notebook with 1–2 plots from generated CSV
