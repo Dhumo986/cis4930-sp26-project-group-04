@@ -8,7 +8,6 @@
 | Name | FSU ID |
 |---|---|
 | Thomas Schmidt | tns23@fsu.edu |
-| Rafik Taleb | rt24e@fsu.edu |
 | Imran Ahmed | ia24c@fsu.edu |
 | Dhruv Upadhyay | dtu24@fsu.edu |
 
@@ -83,7 +82,7 @@ The implementation demonstrates:
 - Pagination loop over multiple pages
 - `try/except` with `raise_for_status()` and `RequestException`
 - Conversion to `pandas.DataFrame`
-- Persistent local storage with CSV append mode (and optional SQLite append)
+- Persistent local storage with CSV and SQLite append
 
 ### Example Fields Collected
 
@@ -106,9 +105,6 @@ The implementation demonstrates:
 Primary output:
 
 - `data/processed/github_repos.csv` (appended across runs)
-
-Optional output:
-
 - SQLite database `data/processed/github_repos.db`
 - Table name: `repo_snapshots`
 - Key columns: `run_timestamp`, `repo_id`, `full_name`, `stargazers_count`
@@ -184,4 +180,3 @@ Role split (rotating):
 - Add CLI arguments (`--query`, `--max-pages`, `--per-page`)
 - Add retry/backoff for temporary API failures
 - Add a mini EDA notebook with 1–2 plots from generated CSV
-
