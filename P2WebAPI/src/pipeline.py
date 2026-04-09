@@ -19,21 +19,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Import teammates' modules
 try:
     from api_client import fetch_repos
 except ImportError:
-    logger.error("api_client.py not found. Make sure your teammate has implemented it.")
+    logger.error("api_client.py not found.")
     raise
 
 try:
     from storage import save_to_csv, save_to_sqlite
 except ImportError:
-    logger.error("storage.py not found. Make sure your teammate has implemented it.")
+    logger.error("storage.py not found.")
     raise
 
 
-# Pipeline configuration
 QUERY     = "python education"
 MAX_PAGES = 3
 PER_PAGE  = 30

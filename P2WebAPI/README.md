@@ -115,11 +115,13 @@ Primary output:
 
 From the `P2WebAPI` directory:
 
+First, create a virtual enviroment and source it. Then, install the requirements (pandas, requests).
+
 ```bash
-python -m src.pipeline
+pip install -r requirements.txt
 ```
 
-Alternative:
+Then, run the pipeline:
 
 ```bash
 python src/pipeline.py
@@ -161,8 +163,6 @@ Example cron schedule (every day at 8:00 AM):
 ---
 
 ## Team Workflow
-
-- Feature branches (`api-client`, `storage`, `error-handling`, `docs`)
 - PR-based merges into main
 - Commit history reflects contributions from all members
 
