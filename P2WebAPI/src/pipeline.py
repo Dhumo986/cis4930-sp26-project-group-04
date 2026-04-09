@@ -19,7 +19,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Import teammates' modules
 try:
     from api_client import fetch_repos
 except ImportError:
@@ -33,7 +32,6 @@ except ImportError:
     raise
 
 
-# Pipeline configuration
 QUERY     = "python education"
 MAX_PAGES = 3
 PER_PAGE  = 30
