@@ -81,3 +81,27 @@
 |--------|---------|
 | `pipeline-orchestration` | All pipeline orchestration work, README, RUN_NOTES, .gitignore |
 | `main` | Final merge after conflict resolution |
+
+---
+
+## Contribution Report — Imran Ahmed
+### FSU ID: IA24C
+
+### Contributions
+
+- **`src/storage.py`** — Implemented the data storage module, including:
+  - `save_to_csv()` function using `pandas.DataFrame` with append mode so repeated runs accumulate data
+  - `save_to_sqlite()` function using `sqlite3` context manager and `df.to_sql()` with `if_exists="append"`
+  - Automatic directory creation with `os.makedirs(..., exist_ok=True)`
+  - Table name: `repo_snapshots` with key columns: `run_timestamp`, `repo_id`, `full_name`, `stargazers_count`
+
+- **`requirements.txt`** — Generated and documented all project dependencies
+
+- **Integration testing** — Verified that `save_to_csv` and `save_to_sqlite` correctly interface with `pipeline.py` and `api_client.py` outputs
+
+### Git Contributions
+
+| Branch | Purpose |
+|--------|---------|
+| `storage-and-docs` | Storage module, requirements.txt, data directory setup |
+| `main` | Merged storage branch into main |
