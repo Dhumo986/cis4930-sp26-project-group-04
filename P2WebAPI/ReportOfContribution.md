@@ -36,3 +36,48 @@
 |--------|---------|
 | `pipeline-orchestration` | Main branch I worked on with Dhruv |
 | `main` | merged pipeline-orchestration -> main and fixed conflicts |
+
+---
+
+## Contribution Report — Dhruv Upadhyay
+### FSU ID: DTU24
+
+### Contributions
+
+- **`src/pipeline.py`** — Wrote the main orchestration script, including:
+  - Logging setup with dual handlers (console + `logs/pipeline.log`)
+  - Graceful `ImportError` handling for missing teammate modules
+  - Full pipeline flow: fetch → save to CSV → save to SQLite
+  - **CLI argument support** (bonus feature) using `argparse`:
+    - `--query` to set the GitHub search query
+    - `--max-pages` to control pagination depth
+    - `--per-page` to set results per page
+  - Verified end-to-end pipeline run producing 90 records across 3 pages
+
+- **`RUN_NOTES.md`** — Wrote full run documentation including:
+  - Install instructions
+  - Example console output matching actual pipeline output
+  - Instructions for simulating scheduled runs
+  - Cron and Windows Task Scheduler examples
+
+- **`README.md`** — Updated and corrected the project README:
+  - Fixed group member table (correct FSU IDs, removed departed member)
+  - Updated repository structure to reflect actual built structure
+  - Fixed example console output to match real pipeline output
+  - Added CLI arguments table for bonus feature
+  - Corrected "Planned" → actual structure
+
+- **`.gitignore`** — Created project-level gitignore excluding:
+  - Generated CSV/SQLite data files
+  - Log files
+  - Python `__pycache__` and `.pyc` files
+  - OS and editor artifacts
+
+- **Repo setup and GitHub workflow** — Set up the `P2WebAPI/` directory structure, created feature branch `pipeline-orchestration`, and managed PR to main.
+
+### Git Contributions
+
+| Branch | Purpose |
+|--------|---------|
+| `pipeline-orchestration` | All pipeline orchestration work, README, RUN_NOTES, .gitignore |
+| `main` | Final merge after conflict resolution |
