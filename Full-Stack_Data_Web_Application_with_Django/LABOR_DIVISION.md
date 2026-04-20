@@ -179,12 +179,3 @@ python3 manage.py runserver
 
 ---
 
-## 📅 Suggested Timeline
-
-| Day | Goal |
-|-----|------|
-| Today | Thomas + Imran clone repo and start their branches |
-| Day 2 | Thomas: all 6 views + templates working; Imran: analytics view + 2 charts |
-| Day 3 | Thomas: Bootstrap UI polished; Imran: search bar done |
-| Day 4 | Dhruv: fetch_data done + Railway deploy; everyone: final polish |
-| Day 5 | README screenshots, `manage.py check --deploy`, final push |
